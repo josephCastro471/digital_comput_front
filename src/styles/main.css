@@ -364,7 +364,7 @@ body {
   text-decoration: underline;
 }
 
-.arqueo-cierre-form {
+.denominaciones-form {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 10px;
@@ -372,18 +372,18 @@ body {
   max-width: 480px;
 }
 
-.arqueo-cierre-form .cantidad-input {
+.denominaciones-form .cantidad-input {
   width: 80px;
   padding: 0.3rem 0.5rem;
   border: 1px solid var(--border);
   border-radius: 6px;
 }
 
-.arqueo-cierre-form .card-value {
+.denominaciones-form .card-value {
   margin: 1rem 0;
 }
 
-.arqueo-cierre-form button {
+.denominaciones-form button {
   padding: 0.5rem 0.9rem;
   border: none;
   border-radius: 8px;
@@ -393,6 +393,27 @@ body {
   font-size: 0.9rem;
 }
 
-.arqueo-cierre-form button:hover {
+.denominaciones-form button:hover {
   background: var(--primary-hover);
+}
+
+.denominaciones-form .nota-input {
+  width: 100%;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  box-sizing: border-box;
+}
+
+.filtro-fecha {
+  margin-bottom: 1rem;
+}
+
+.filtro-fecha input[type="date"] {
+  padding: 0.4rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin-left: 0.4rem;
 }

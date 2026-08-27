@@ -4,11 +4,13 @@ import { renderDashboard } from "./components/dashboard/dashboard.page.js";
 import { renderCuentas } from "./components/cuentas/cuentas.page.js";
 import { renderServicios } from "./components/servicios/servicios.page.js";
 import { renderArqueo } from "./components/arqueo/arqueo.page.js";
+import { renderConteoMonedas } from "./components/conteo-monedas/conteo-monedas.page.js";
 
 registerRoute("/login", renderLogin);
 registerRoute("/dashboard", renderDashboard);
 registerRoute("/cuentas", renderCuentas);
 registerRoute("/servicios", renderServicios);
 registerRoute("/arqueo", renderArqueo);
+registerRoute("/conteo-monedas", renderConteoMonedas);
 
 startRouter();

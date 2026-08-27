@@ -1,8 +1,8 @@
 import { listArqueos, abrirArqueo, cerrarArqueo } from "../../services/arqueo.service.js";
 import { formatCurrency } from "../../utils/format.js";
 import { describeError } from "../../utils/errors.js";
+import { DENOMINACIONES } from "../../utils/denominaciones.js";
 
-const DENOMINACIONES = [0.01, 0.05, 0.1, 0.25, 0.5, 1, 5, 10, 20, 50, 100];
 const ESTADO_LABELS = { abierto: "Abierto", cerrado: "Cerrado" };
 
 export async function renderArqueo(outlet) {
@@ -108,7 +108,7 @@ function buildInfoCard(title, value) {
 
 function buildFormCerrar(arqueo, outlet) {
   const form = document.createElement("form");
-  form.className = "arqueo-cierre-form";
+  form.className = "denominaciones-form";
 
   const table = document.createElement("table");
   table.className = "table";
