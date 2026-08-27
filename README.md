@@ -23,6 +23,7 @@ Abre `http://localhost:5173`. El backend debe estar corriendo (`uvicorn app.main
 
 ## Estado
 
-- **Setup inicial** — completo: Vite, estructura de carpetas, `api.js`, login funcional contra el backend real (verificado con `npm run build` + llamadas HTTP simulando el navegador, incluyendo el preflight CORS), shell con navegación a los 8 módulos (los links existen, las páginas todavía no).
+- **Setup inicial** — completo: Vite, estructura de carpetas, `api.js`, login funcional contra el backend real (verificado con `npm run build` + llamadas HTTP simulando el navegador, incluyendo el preflight CORS), shell con navegación a los 8 módulos.
 - **Dashboard** — implementado: resumen del día (ventas, comisiones, turno de caja, saldos de cuentas).
-- **Pendiente**: una página por módulo (cuentas, servicios, arqueo, conteo de monedas, ventas, comisiones, directorio, inventario) — se irán agregando de a una, como se hizo con las fases del backend.
+- **Cuentas** — implementado: lista maestro-detalle (click en una cuenta muestra su detalle), formulario de nuevo movimiento (el tipo `uso` solo aparece para cuentas `cupo_revolvente`, igual que la regla del backend), formulario de actualización de cupo transaccional (solo `cupo_revolvente`), y tabla de movimientos.
+- **Pendiente**: una página por módulo restante (servicios, arqueo, conteo de monedas, ventas, comisiones, directorio, inventario) — se van agregando de a una.

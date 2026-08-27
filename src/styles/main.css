@@ -210,3 +210,65 @@ body {
 .table tbody tr:last-child td {
   border-bottom: none;
 }
+
+.clickable-row {
+  cursor: pointer;
+}
+
+.clickable-row:hover td {
+  background: var(--bg);
+}
+
+.selected-row td {
+  background: #eff6ff;
+}
+
+.cuentas-layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 340px) 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.cuentas-detalle h2 {
+  margin-top: 0;
+}
+
+.inline-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 1rem 0;
+}
+
+.inline-form input,
+.inline-form select {
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.inline-form button {
+  padding: 0.5rem 0.9rem;
+  border: none;
+  border-radius: 8px;
+  background: var(--primary);
+  color: white;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.inline-form button:hover {
+  background: var(--primary-hover);
+}
+
+.inline-form button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.inline-form .error-msg {
+  flex-basis: 100%;
+}
