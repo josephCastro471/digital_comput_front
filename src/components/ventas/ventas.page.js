@@ -82,7 +82,15 @@ function buildNuevaVenta(outlet) {
     carritoContainer.appendChild(buildCarritoTabla(redrawCarrito));
   }
 
-  wrap.appendChild(buildAgregarItemForm(redrawCarrito));
+  const serviciosActivos = state.servicios.filter((s) => s.activo);
+  if (serviciosActivos.length === 0) {
+    const aviso = document.createElement("p");
+    aviso.className = "error-msg";
+    aviso.textContent = 'No hay servicios activos. Anda a "Servicios" y crea al menos uno antes de registrar una venta.';
+    wrap.appendChild(aviso);
+  } else {
+    wrap.appendChild(buildAgregarItemForm(redrawCarrito));
+  }
   wrap.appendChild(carritoContainer);
   redrawCarrito();
 

@@ -252,7 +252,8 @@ body {
 
 .inline-form select {
   min-width: 220px;
-  flex: 1 1 220px;
+  max-width: 100%;
+  flex: 0 1 auto;
 }
 
 .inline-form button {
