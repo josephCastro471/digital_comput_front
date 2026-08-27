@@ -34,3 +34,8 @@ Abre `http://localhost:5173`. El backend debe estar corriendo (`uvicorn app.main
 - **Directorio** — implementado: CRUD de entradas (empresa/cliente) con nombre, código, red, cédula/cuenta y nota; buscador que filtra en el backend por cualquiera de esos campos (`ilike`); editar reutiliza el mismo formulario, eliminar con confirmación.
 - **Inventario** — implementado: catálogo de accesorios (nombre, costo, precio de venta, stock), formulario de creación y edición (el stock no se edita a mano — solo cambia por movimientos, igual que valida el backend); botón "Movimiento" por fila abre un formulario inline de entrada/salida con motivo opcional; el backend rechaza salidas que superan el stock disponible y la página muestra ese error.
 - **Pendiente**: ninguno — los 9 módulos de negocio están implementados.
+
+## Fixes post-revisión (Fase 9)
+
+- **Comisiones**: la fórmula de cálculo estaba mal (sumaba comisión+IVA sobre `valor_recibir` en vez de calcular el valor a cobrar de forma que, tras descontar la comisión y el IVA, el negocio se quede exactamente con `valor_recibir`). Corregido en el backend con la fórmula de "gross-up"; verificado contra los casos reales de Joseph (Payphone 5%: recibir 50 → cobrar 53.05; Deuna 4%: recibir 48 → cobrar 50.31). Se agregó una nota en la UI aclarando que los porcentajes se ingresan como número entero (`15` para 15%, no `0.15`).
+- **Ventas**: el selector de servicio se veía diminuto e inutilizable — vivía dentro de un `.inline-form` (`display:flex`) sin `min-width`, y los `<select>` se colapsan por defecto en flexbox. Se agregó `min-width`/`flex-grow` a `.inline-form select`, lo que corrige el problema en todas las páginas que reutilizan esa clase (Cuentas, Comisiones, Inventario).

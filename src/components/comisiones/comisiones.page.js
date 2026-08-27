@@ -53,6 +53,13 @@ function draw(outlet) {
 }
 
 function buildProveedoresTabla(outlet) {
+  const wrap = document.createElement("div");
+
+  const nota = document.createElement("p");
+  nota.className = "card-subtitle";
+  nota.textContent = "Los porcentajes se ingresan como numero entero, ej: 15 para 15% (no 0.15).";
+  wrap.appendChild(nota);
+
   const table = document.createElement("table");
   table.className = "table";
   table.innerHTML =
@@ -74,6 +81,7 @@ function buildProveedoresTabla(outlet) {
     comisionInput.max = "100";
     comisionInput.value = proveedor.comision_pct;
     comisionInput.className = "cantidad-input";
+    comisionInput.title = "Ingresa como numero entero, ej: 5 para 5%";
     tdComision.appendChild(comisionInput);
     tr.appendChild(tdComision);
 
@@ -93,6 +101,7 @@ function buildProveedoresTabla(outlet) {
     ivaPctInput.value = proveedor.iva_pct;
     ivaPctInput.className = "cantidad-input";
     ivaPctInput.disabled = !proveedor.aplica_iva;
+    ivaPctInput.title = "Ingresa como numero entero, ej: 15 para 15%";
     tdIvaPct.appendChild(ivaPctInput);
     tr.appendChild(tdIvaPct);
 
@@ -126,7 +135,8 @@ function buildProveedoresTabla(outlet) {
   });
 
   table.appendChild(tbody);
-  return table;
+  wrap.appendChild(table);
+  return wrap;
 }
 
 function buildCalculadora(outlet) {

@@ -250,6 +250,11 @@ body {
   font-size: 0.9rem;
 }
 
+.inline-form select {
+  min-width: 220px;
+  flex: 1 1 220px;
+}
+
 .inline-form button {
   padding: 0.5rem 0.9rem;
   border: none;
