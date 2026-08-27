@@ -39,3 +39,11 @@ Abre `http://localhost:5173`. El backend debe estar corriendo (`uvicorn app.main
 
 - **Comisiones**: la fórmula de cálculo estaba mal (sumaba comisión+IVA sobre `valor_recibir` en vez de calcular el valor a cobrar de forma que, tras descontar la comisión y el IVA, el negocio se quede exactamente con `valor_recibir`). Corregido en el backend con la fórmula de "gross-up"; verificado contra los casos reales de Joseph (Payphone 5%: recibir 50 → cobrar 53.05; Deuna 4%: recibir 48 → cobrar 50.31). Se agregó una nota en la UI aclarando que los porcentajes se ingresan como número entero (`15` para 15%, no `0.15`).
 - **Ventas**: el selector de servicio se veía diminuto e inutilizable — vivía dentro de un `.inline-form` (`display:flex`) sin `min-width`, y los `<select>` se colapsan por defecto en flexbox. Se agregó `min-width` a `.inline-form select` para que nunca colapse, sin `flex-grow` para que no se estire de forma absurda cuando no tiene contenido. Ademas, la causa raíz real de que el selector apareciera vacío era que la base de datos real todavía no tiene ningún servicio cargado (regla de negocio: el catálogo no se precarga, Joseph lo carga directo) — ahora la página muestra un aviso claro ("No hay servicios activos...") en vez de un dropdown vacío cuando pasa esto.
+
+## Fase 9 — Pulido
+
+- **Responsive**: breakpoint a 768px. El sidebar pasa de columna fija (220px) a una barra superior horizontal con los links envolviendo en filas; las tablas se vuelven scrolleables horizontalmente (`overflow-x: auto`) en vez de romper el layout; el layout maestro-detalle de Cuentas colapsa a una sola columna; el login-card usa `min(320px, 90vw)` para no desbordar en pantallas muy angostas.
+- **Atajos de teclado**:
+  - `Alt+1` a `Alt+9` navega directo a cada uno de los 9 módulos (el número corresponde al orden del sidebar; aparece como tooltip al pasar el mouse sobre cada link). Implementado en `src/shortcuts.js`, ignora la combinación si hay Ctrl/Shift/Meta presionado (para no pisar AltGr) o si no hay sesión iniciada.
+  - `Escape` cancela el modo de edición activo en Servicios, Directorio e Inventario (y también cierra el formulario de movimiento abierto en Inventario), sin necesidad de hacer click en "Cancelar".
+- **Deploy a producción**: pendiente — se aborda cuando se decida el proveedor de hosting.

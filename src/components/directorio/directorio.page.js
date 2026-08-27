@@ -5,6 +5,7 @@ import {
   eliminarDirectorio,
 } from "../../services/directorio.service.js";
 import { describeError } from "../../utils/errors.js";
+import { onEscape } from "../../shortcuts.js";
 
 const TIPO_LABELS = { empresa: "Empresa", cliente: "Cliente" };
 
@@ -42,6 +43,12 @@ export async function renderDirectorio(outlet) {
   outlet.appendChild(tablaTitle);
 
   outlet.appendChild(buildTabla(outlet));
+
+  onEscape("directorio", async () => {
+    if (!state.editando) return;
+    state.editando = null;
+    await renderDirectorio(outlet);
+  });
 }
 
 function buildForm(outlet) {

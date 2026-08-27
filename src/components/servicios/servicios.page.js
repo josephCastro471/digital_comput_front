@@ -6,6 +6,7 @@ import {
 } from "../../services/servicios.service.js";
 import { formatCurrency } from "../../utils/format.js";
 import { describeError } from "../../utils/errors.js";
+import { onEscape } from "../../shortcuts.js";
 
 const TIPO_LABELS = { fijo: "Fijo", escalonado: "Escalonado", variable: "Variable" };
 
@@ -41,6 +42,13 @@ export async function renderServicios(outlet) {
   outlet.appendChild(tablaTitle);
 
   outlet.appendChild(buildTabla(outlet));
+
+  onEscape("servicios", async () => {
+    if (!state.editando) return;
+    state.editando = null;
+    state.escalones = [];
+    await renderServicios(outlet);
+  });
 }
 
 function buildForm(outlet) {

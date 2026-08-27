@@ -1,7 +1,7 @@
 import { isAuthenticated, logout } from "../../services/auth.service.js";
 import { navigate } from "../../router.js";
 
-const NAV_ITEMS = [
+export const NAV_ITEMS = [
   { path: "/dashboard", label: "Dashboard" },
   { path: "/cuentas", label: "Cuentas" },
   { path: "/servicios", label: "Servicios" },
@@ -38,11 +38,12 @@ export function renderShell() {
 
   const list = document.createElement("ul");
   const currentPath = window.location.hash.slice(1) || "/dashboard";
-  NAV_ITEMS.forEach(({ path, label }) => {
+  NAV_ITEMS.forEach(({ path, label }, index) => {
     const li = document.createElement("li");
     const a = document.createElement("a");
     a.href = `#${path}`;
     a.textContent = label;
+    a.title = `Alt+${index + 1}`;
     if (currentPath === path) a.classList.add("active");
     li.appendChild(a);
     list.appendChild(li);

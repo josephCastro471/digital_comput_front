@@ -6,6 +6,7 @@ import {
 } from "../../services/inventario.service.js";
 import { formatCurrency } from "../../utils/format.js";
 import { describeError } from "../../utils/errors.js";
+import { onEscape } from "../../shortcuts.js";
 
 const state = {
   accesorios: [],
@@ -39,6 +40,13 @@ export async function renderInventario(outlet) {
   outlet.appendChild(tablaTitle);
 
   outlet.appendChild(buildTabla(outlet));
+
+  onEscape("inventario", async () => {
+    if (!state.editando && state.movimientoAbiertoId === null) return;
+    state.editando = null;
+    state.movimientoAbiertoId = null;
+    await renderInventario(outlet);
+  });
 }
 
 function buildForm(outlet) {
