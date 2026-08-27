@@ -272,3 +272,94 @@ body {
 .inline-form .error-msg {
   flex-basis: 100%;
 }
+
+.servicio-form {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 0.6rem;
+}
+
+.servicio-form input[type="text"],
+.servicio-form input[type="number"],
+.servicio-form select {
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.servicio-form button {
+  padding: 0.5rem 0.9rem;
+  border: none;
+  border-radius: 8px;
+  background: var(--primary);
+  color: white;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.servicio-form button:hover {
+  background: var(--primary-hover);
+}
+
+.servicio-form button[type="button"] {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+.servicio-campos {
+  display: flex;
+  gap: 0.6rem;
+  flex-basis: 100%;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.escalones-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-basis: 100%;
+}
+
+.escalon-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.escalon-row input {
+  padding: 0.4rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  width: 140px;
+}
+
+.link-btn {
+  border: none;
+  background: none;
+  color: var(--primary);
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 0.2rem 0.4rem;
+}
+
+.link-btn--danger {
+  color: var(--danger);
+}
+
+.link-btn:hover {
+  text-decoration: underline;
+}
