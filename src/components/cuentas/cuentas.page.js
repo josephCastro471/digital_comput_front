@@ -3,6 +3,8 @@ import {
   listMovimientos,
   crearMovimiento,
   actualizarCupo,
+  iniciarDia,
+  cerrarDia,
 } from "../../services/cuentas.service.js";
 import { formatCurrency } from "../../utils/format.js";
 import { describeError } from "../../utils/errors.js";
@@ -24,6 +26,7 @@ const MOVIMIENTO_LABELS = {
 const state = {
   cuentas: [],
   seleccionadaId: null,
+  ultimoRecaudado: null,
 };
 
 export async function renderCuentas(outlet) {
@@ -80,6 +83,7 @@ function buildListaCuentas(outlet) {
     if (cuenta.id === state.seleccionadaId) tr.classList.add("selected-row");
     tr.innerHTML = `<td>${cuenta.nombre}</td><td>${TIPO_LABELS[cuenta.tipo] || cuenta.tipo}</td><td>${formatCurrency(cuenta.saldo_actual)}</td>`;
     tr.addEventListener("click", async () => {
+      if (state.seleccionadaId !== cuenta.id) state.ultimoRecaudado = null;
       state.seleccionadaId = cuenta.id;
       await draw(outlet);
     });
@@ -128,7 +132,17 @@ async function drawDetalle(container, outlet) {
       buildInfoCard("Cupo disponible", cuenta.cupo_disponible != null ? formatCurrency(cuenta.cupo_disponible) : "-")
     );
   }
+  if (cuenta.tipo === "fondo_fijo") {
+    info.appendChild(buildInfoCard("Saldo inicial del dia", formatCurrency(cuenta.saldo_inicial_dia)));
+    if (state.ultimoRecaudado != null) {
+      info.appendChild(buildInfoCard("Recaudado (ultimo cuadre)", formatCurrency(state.ultimoRecaudado)));
+    }
+  }
   container.appendChild(info);
+
+  if (cuenta.tipo === "fondo_fijo") {
+    container.appendChild(buildFormCuadreFondo(cuenta, outlet));
+  }
 
   container.appendChild(buildFormMovimiento(cuenta, outlet));
 
@@ -202,6 +216,88 @@ function buildFormMovimiento(cuenta, outlet) {
   });
 
   return form;
+}
+
+function buildFormCuadreFondo(cuenta, outlet) {
+  const wrap = document.createElement("div");
+  wrap.className = "denominaciones-form";
+
+  const title = document.createElement("h3");
+  title.textContent = "Cuadre del fondo";
+  wrap.appendChild(title);
+
+  const ayuda = document.createElement("p");
+  ayuda.className = "card-subtitle";
+  ayuda.textContent =
+    'Al iniciar el dia, ingresa el saldo que ves en la cuenta bancaria. Al cerrar/cuadrar, ingresa el saldo final y el sistema calcula lo recaudado.';
+  wrap.appendChild(ayuda);
+
+  const errorMsg = document.createElement("p");
+  errorMsg.className = "error-msg";
+  errorMsg.hidden = true;
+
+  const formInicio = document.createElement("form");
+  formInicio.className = "inline-form";
+  const inicioInput = document.createElement("input");
+  inicioInput.type = "number";
+  inicioInput.step = "0.01";
+  inicioInput.min = "0";
+  inicioInput.placeholder = "Saldo al iniciar el dia";
+  inicioInput.required = true;
+  const inicioBtn = document.createElement("button");
+  inicioBtn.type = "submit";
+  inicioBtn.textContent = "Iniciar dia";
+  formInicio.appendChild(inicioInput);
+  formInicio.appendChild(inicioBtn);
+
+  formInicio.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    errorMsg.hidden = true;
+    inicioBtn.disabled = true;
+    try {
+      await iniciarDia(cuenta.id, inicioInput.value);
+      state.ultimoRecaudado = null;
+      await renderCuentas(outlet);
+    } catch (err) {
+      errorMsg.textContent = describeError(err);
+      errorMsg.hidden = false;
+      inicioBtn.disabled = false;
+    }
+  });
+
+  const formCierre = document.createElement("form");
+  formCierre.className = "inline-form";
+  const cierreInput = document.createElement("input");
+  cierreInput.type = "number";
+  cierreInput.step = "0.01";
+  cierreInput.min = "0";
+  cierreInput.placeholder = "Saldo al cerrar/cuadrar";
+  cierreInput.required = true;
+  const cierreBtn = document.createElement("button");
+  cierreBtn.type = "submit";
+  cierreBtn.textContent = "Cerrar dia / Cuadre";
+  formCierre.appendChild(cierreInput);
+  formCierre.appendChild(cierreBtn);
+
+  formCierre.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    errorMsg.hidden = true;
+    cierreBtn.disabled = true;
+    try {
+      const resultado = await cerrarDia(cuenta.id, cierreInput.value);
+      state.ultimoRecaudado = resultado.recaudado;
+      await renderCuentas(outlet);
+    } catch (err) {
+      errorMsg.textContent = describeError(err);
+      errorMsg.hidden = false;
+      cierreBtn.disabled = false;
+    }
+  });
+
+  wrap.appendChild(formInicio);
+  wrap.appendChild(formCierre);
+  wrap.appendChild(errorMsg);
+  return wrap;
 }
 
 function buildFormCupo(cuenta, outlet) {

@@ -19,3 +19,11 @@ export function crearMovimiento(id, payload) {
 export function actualizarCupo(id, payload) {
   return api.patch(`/api/cuentas/${id}/cupo`, payload);
 }
+
+export function iniciarDia(id, saldo) {
+  return api.post(`/api/cuentas/${id}/iniciar-dia`, { saldo });
+}
+
+export function cerrarDia(id, saldo) {
+  return api.post(`/api/cuentas/${id}/cerrar-dia`, { saldo });
+}
