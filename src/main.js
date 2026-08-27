@@ -7,6 +7,7 @@ import { renderArqueo } from "./components/arqueo/arqueo.page.js";
 import { renderConteoMonedas } from "./components/conteo-monedas/conteo-monedas.page.js";
 import { renderVentas } from "./components/ventas/ventas.page.js";
 import { renderComisiones } from "./components/comisiones/comisiones.page.js";
+import { renderDirectorio } from "./components/directorio/directorio.page.js";
 
 registerRoute("/login", renderLogin);
 registerRoute("/dashboard", renderDashboard);
@@ -16,5 +17,6 @@ registerRoute("/arqueo", renderArqueo);
 registerRoute("/conteo-monedas", renderConteoMonedas);
 registerRoute("/ventas", renderVentas);
 registerRoute("/comisiones", renderComisiones);
+registerRoute("/directorio", renderDirectorio);
 
 startRouter();
