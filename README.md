@@ -13,6 +13,16 @@ npm run dev
 
 Abre `http://localhost:5173`. El backend debe estar corriendo (`uvicorn app.main:app --reload` desde `computdigital-backend/`, con `CORS_ORIGINS` incluyendo `http://localhost:5173` — ya es el default).
 
+## CI
+
+`.github/workflows/build.yml` corre `npm ci && npm run build` en cada push/PR a `main`, para detectar errores de build antes de desplegar.
+
+## Deploy a producción (Vercel)
+
+1. En Vercel: **Add New > Project**, importar este repo. Vercel detecta Vite automáticamente (`npm run build`, carpeta `dist`) — no hace falta `vercel.json`.
+2. En las variables de entorno del proyecto (Vercel dashboard), agregar `VITE_API_URL` apuntando a la URL del backend en Render (ej: `https://computdigital-backend.onrender.com`). Al ser un router por hash (`#/ruta`), no hace falta configurar rewrites/fallback — cualquier ruta sirve el mismo `index.html`.
+3. Una vez desplegado, copiar la URL que asigna Vercel (ej: `https://digital-comput-front.vercel.app`) y agregarla a `CORS_ORIGINS` en el backend de Render — si no, el navegador bloquea las llamadas por CORS.
+
 ## Arquitectura
 
 - **`src/router.js`** — router propio basado en hash (`#/ruta`), sin dependencias externas. Redirige a `/login` si no hay token, y de `/login` a `/dashboard` si ya hay sesión.
