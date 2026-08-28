@@ -56,4 +56,5 @@ Abre `http://localhost:5173`. El backend debe estar corriendo (`uvicorn app.main
 - **Atajos de teclado**:
   - `Alt+1` a `Alt+9` navega directo a cada uno de los 9 módulos (el número corresponde al orden del sidebar; aparece como tooltip al pasar el mouse sobre cada link). Implementado en `src/shortcuts.js`, ignora la combinación si hay Ctrl/Shift/Meta presionado (para no pisar AltGr) o si no hay sesión iniciada.
   - `Escape` cancela el modo de edición activo en Servicios, Directorio e Inventario (y también cierra el formulario de movimiento abierto en Inventario), sin necesidad de hacer click en "Cancelar".
-- **Deploy a producción**: pendiente — se aborda cuando se decida el proveedor de hosting.
+- **Deploy a producción**: hecho — backend en Render, frontend en Vercel, base en Neon.
+- **Recordatorio de cierre de turno**: `src/reminders.js` revisa cada 60s si son las 19:00 o más y hay un turno de Arqueo abierto (`GET /api/arqueo?estado=abierto`); si es así, muestra una barra fija arriba de la página (fuera del `#app`, sobrevive a los cambios de ruta) con un botón directo a Arqueo. No cierra nada automáticamente — el cierre real necesita el conteo de denominaciones, que solo Joseph puede dar.

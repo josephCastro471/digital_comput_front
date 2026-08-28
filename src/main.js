@@ -10,6 +10,7 @@ import { renderComisiones } from "./components/comisiones/comisiones.page.js";
 import { renderDirectorio } from "./components/directorio/directorio.page.js";
 import { renderInventario } from "./components/inventario/inventario.page.js";
 import { setupGlobalShortcuts } from "./shortcuts.js";
+import { setupTurnoReminder } from "./reminders.js";
 
 registerRoute("/login", renderLogin);
 registerRoute("/dashboard", renderDashboard);
@@ -23,4 +24,5 @@ registerRoute("/directorio", renderDirectorio);
 registerRoute("/inventario", renderInventario);
 
 setupGlobalShortcuts();
+setupTurnoReminder();
 startRouter();
