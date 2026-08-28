@@ -24,6 +24,9 @@ export function iniciarDia(id, saldo) {
   return api.post(`/api/cuentas/${id}/iniciar-dia`, { saldo });
 }
 
-export function cerrarDia(id, saldo) {
-  return api.post(`/api/cuentas/${id}/cerrar-dia`, { saldo });
+export function cerrarDia(id, saldoBanco, montoRetirado) {
+  return api.post(`/api/cuentas/${id}/cerrar-dia`, {
+    saldo_banco: saldoBanco,
+    monto_retirado: montoRetirado || 0,
+  });
 }
