@@ -3,8 +3,7 @@ import {
   listMovimientos,
   crearMovimiento,
   actualizarCupo,
-  iniciarDia,
-  cerrarDia,
+  cuadrarFondo,
 } from "../../services/cuentas.service.js";
 import { formatCurrency } from "../../utils/format.js";
 import { describeError } from "../../utils/errors.js";
@@ -133,11 +132,9 @@ async function drawDetalle(container, outlet) {
     );
   }
   if (cuenta.tipo === "fondo_fijo") {
-    info.appendChild(buildInfoCard("Base actual", formatCurrency(cuenta.saldo_inicial_dia)));
+    info.appendChild(buildInfoCard("Valor inicial", formatCurrency(cuenta.saldo_inicial_dia)));
     if (state.ultimoRecaudado != null) {
       info.appendChild(buildInfoCard("Recaudado (ultimo cuadre)", formatCurrency(state.ultimoRecaudado.recaudado)));
-      info.appendChild(buildInfoCard("Retirado", formatCurrency(state.ultimoRecaudado.retirado)));
-      info.appendChild(buildInfoCard("Nueva base", formatCurrency(state.ultimoRecaudado.nuevaBase)));
     }
   }
   container.appendChild(info);
@@ -231,84 +228,43 @@ function buildFormCuadreFondo(cuenta, outlet) {
   const ayuda = document.createElement("p");
   ayuda.className = "card-subtitle";
   ayuda.textContent =
-    "Al iniciar el dia, ingresa el saldo que ves en la cuenta bancaria. Al cerrar/cuadrar, ingresa el saldo bancario actual y cuanto vas a retirar fisicamente de lo recaudado (puede ser menos que el total, o 0) — la nueva base para manana queda en base_actual menos lo retirado.";
+    "Ingresa lo que decides que queda en la cuenta ahora mismo. El sistema calcula lo recaudado (valor inicial menos valor actual) y ese valor queda guardado como el valor inicial para el proximo cuadre.";
   wrap.appendChild(ayuda);
 
   const errorMsg = document.createElement("p");
   errorMsg.className = "error-msg";
   errorMsg.hidden = true;
 
-  const formInicio = document.createElement("form");
-  formInicio.className = "inline-form";
-  const inicioInput = document.createElement("input");
-  inicioInput.type = "number";
-  inicioInput.step = "0.01";
-  inicioInput.min = "0";
-  inicioInput.placeholder = "Saldo al iniciar el dia";
-  inicioInput.required = true;
-  const inicioBtn = document.createElement("button");
-  inicioBtn.type = "submit";
-  inicioBtn.textContent = "Iniciar dia";
-  formInicio.appendChild(inicioInput);
-  formInicio.appendChild(inicioBtn);
+  const form = document.createElement("form");
+  form.className = "inline-form";
+  const valorInput = document.createElement("input");
+  valorInput.type = "number";
+  valorInput.step = "0.01";
+  valorInput.min = "0";
+  valorInput.placeholder = "Valor actual";
+  valorInput.required = true;
+  const btn = document.createElement("button");
+  btn.type = "submit";
+  btn.textContent = "Guardar cuadre";
+  form.appendChild(valorInput);
+  form.appendChild(btn);
 
-  formInicio.addEventListener("submit", async (event) => {
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
     errorMsg.hidden = true;
-    inicioBtn.disabled = true;
+    btn.disabled = true;
     try {
-      await iniciarDia(cuenta.id, inicioInput.value);
-      state.ultimoRecaudado = null;
+      const resultado = await cuadrarFondo(cuenta.id, valorInput.value);
+      state.ultimoRecaudado = { recaudado: resultado.recaudado };
       await renderCuentas(outlet);
     } catch (err) {
       errorMsg.textContent = describeError(err);
       errorMsg.hidden = false;
-      inicioBtn.disabled = false;
+      btn.disabled = false;
     }
   });
 
-  const formCierre = document.createElement("form");
-  formCierre.className = "inline-form";
-  const cierreInput = document.createElement("input");
-  cierreInput.type = "number";
-  cierreInput.step = "0.01";
-  cierreInput.min = "0";
-  cierreInput.placeholder = "Saldo bancario actual";
-  cierreInput.required = true;
-  const retiroInput = document.createElement("input");
-  retiroInput.type = "number";
-  retiroInput.step = "0.01";
-  retiroInput.min = "0";
-  retiroInput.placeholder = "Monto a retirar (0 si no retiras)";
-  retiroInput.value = "0";
-  const cierreBtn = document.createElement("button");
-  cierreBtn.type = "submit";
-  cierreBtn.textContent = "Cerrar dia / Cuadre";
-  formCierre.appendChild(cierreInput);
-  formCierre.appendChild(retiroInput);
-  formCierre.appendChild(cierreBtn);
-
-  formCierre.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    errorMsg.hidden = true;
-    cierreBtn.disabled = true;
-    try {
-      const resultado = await cerrarDia(cuenta.id, cierreInput.value, retiroInput.value);
-      state.ultimoRecaudado = {
-        recaudado: resultado.recaudado,
-        retirado: resultado.monto_retirado,
-        nuevaBase: resultado.nueva_base,
-      };
-      await renderCuentas(outlet);
-    } catch (err) {
-      errorMsg.textContent = describeError(err);
-      errorMsg.hidden = false;
-      cierreBtn.disabled = false;
-    }
-  });
-
-  wrap.appendChild(formInicio);
-  wrap.appendChild(formCierre);
+  wrap.appendChild(form);
   wrap.appendChild(errorMsg);
   return wrap;
 }

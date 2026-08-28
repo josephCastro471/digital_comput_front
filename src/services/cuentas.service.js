@@ -20,13 +20,6 @@ export function actualizarCupo(id, payload) {
   return api.patch(`/api/cuentas/${id}/cupo`, payload);
 }
 
-export function iniciarDia(id, saldo) {
-  return api.post(`/api/cuentas/${id}/iniciar-dia`, { saldo });
-}
-
-export function cerrarDia(id, saldoBanco, montoRetirado) {
-  return api.post(`/api/cuentas/${id}/cerrar-dia`, {
-    saldo_banco: saldoBanco,
-    monto_retirado: montoRetirado || 0,
-  });
+export function cuadrarFondo(id, valorActual) {
+  return api.post(`/api/cuentas/${id}/cuadre`, { valor_actual: valorActual });
 }
